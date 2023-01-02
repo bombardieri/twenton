@@ -1,3 +1,5 @@
+#ifndef VECTOR3_H_
+#define VECTOR3_H_
 
 class Vector3
 {
@@ -31,3 +33,5 @@ class Vector3
     private:
         double x,y,z;
 };
+
+#endif

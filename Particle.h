@@ -1,3 +1,6 @@
+#ifndef PARTICLE_H_
+#define PARTICLE_H_
+
 #include "Vector3.h"
 
 class Particle
@@ -10,3 +13,5 @@ class Particle
         Vector3 Vel; // Velocità
         Vector3 Acc; // Accelerazione
 };
+
+#endif
