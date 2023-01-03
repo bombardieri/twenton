@@ -1,0 +1,37 @@
+// calculate gravitational force on p1 (force on p2 is the same but with inverted sense)
+function calcGravForce(p1: PartStatus, p2: PartStatus) -> Vector3
+{
+	vector = p2.pos - p1.pos
+	distance := vector.magnitude()
+	versor = vector / distance
+	fModule = G * (p1.particle.m * p2.particle.m) / distance^2;
+	return versor * fModule
+}
+
+method Simulation.nextStep {
+	if snapshots is empty {
+		s := copy(initState)
+		for i:=0 to s.getPartsNum() {
+			p := ref to s.getPartAt(i)
+			p.acc = 0
+		}
+	} else {
+		s := copy(snapshots.last)
+		for i:=0 to s.getPartsNum() {
+			p1 := ref to s.getPartAt(i)
+			for j:=i to s.getPartsNum() {
+				p2 := ref to s.getPartAt(j)
+				newForce := calcGravForce(p1, p2)
+				p1.force += newForce
+				p2.force += -newForce
+			}
+			p1.acc := p1.force / p1.particle.m
+		}
+	}
+	for i:=0 to s.getPartsNum() {
+		p := ref to s.getPartAt(i)
+		p.vel += p.acc * sampleTimeSec
+		p.pos += p.vel * sampleTimeSec
+	}
+	snapshots.pushLast(s)
+}
